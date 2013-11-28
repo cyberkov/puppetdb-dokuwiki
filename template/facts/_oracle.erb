@@ -1,0 +1,20 @@
+<% if scope.to_hash.select { |k,v| k.to_s =~ /^oracle_/ }.size >= 1 -%>
+===== Oracle =====
+<% scope.to_hash.select { |k,v| k.to_s =~ /^oracle_/ }.sort.each do |k,v|
+  key = k.split('_',2) 
+
+  #skip useless information
+  next if key[1] =~ /^asm$|^cluster$/
+
+  if key[1] == 'cluster_nodes'
+    nodes = v.split(',')
+    v = nodes.map {|x| "[[server:#{x}]]"}.join(",")
+  end
+
+  if key[1] == 'cluster_name'
+    v = "[[http://oraclegroupswiki.example.com/wiki/#{v}|#{v}]]"
+  end
+-%>
+^<%= key[1].tr('_',' ') %>|<%= v %>|
+<% end -%>
+<% end -%>

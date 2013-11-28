@@ -1,0 +1,9 @@
+===== Software =====
+^Software^Version^
+|Operatingsystem|<%= scope.lookupvar('operatingsystem') -%> <%= scope.lookupvar('operatingsystemrelease') %>|
+|Kernel|<%= scope.lookupvar('kernelversion') %>|
+|Puppet|<%= scope.lookupvar('puppetversion') %>|
+|Facter|<%= scope.lookupvar('facterversion') %>|
+|Netbackup|<%= scope.lookupvar('netbackupversion') %>|
+<% if scope.lookupvar('vmwaretools_version') -%>|VMWare Tools|<%= scope.lookupvar('vmwaretools_version') %>|<% end -%>
+

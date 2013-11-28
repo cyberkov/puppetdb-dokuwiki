@@ -1,0 +1,20 @@
+<% if scope.to_hash.select { |k,v| k.to_s =~ /disk_/ }.size >= 1 -%>
+===== Filesystems =====
+<% disks = {}
+require 'filesize'
+
+  scope.to_hash.select { |k,v| k.to_s =~ /disk_/ }.sort.each do |k,v|
+    key = k.split('_',2)
+    disks[key[1]] = v
+  end
+# "c0d0p1"=>"/boot;ext3;251M;156M;35%used",
+# "vg00-lv_appl"=>"/appl;ext3;496M;464M;2%used",
+%>
+
+^Disk^Mountpoint^Filesystem^Size^
+<% disks.sort.each do |disk,line| 
+  data = line.split(';')
+-%>
+|<%= disk %>|<%= data[0] %>|<%= data[1] %>|<%= Filesize.from("#{data[2]}B").pretty %>|
+<% end -%>
+<% end -%>

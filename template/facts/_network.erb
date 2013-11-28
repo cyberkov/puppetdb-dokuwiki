@@ -1,0 +1,40 @@
+===== Network =====
+==== Interfaces ====
+^Interface^Ip Address^Netmask^MTU^MAC Address^Slaves^
+<% scope.lookupvar('interfaces').split(",").each do |interface| 
+next if interface =~ /^sit0|^lo$/
+-%>
+|<%= interface.tr('_',':') %>|<%= scope.lookupvar("ipaddress_#{interface}") %>|<%= scope.lookupvar("netmask_#{interface}") %>|<%= scope.lookupvar("mtu_#{interface}") %>|<%= scope.lookupvar("macaddress_#{interface}") %>|<%= scope.lookupvar("bonding_#{interface}_slaves") %>|
+<% end -%>
+
+<% if scope.lookupvar("cdpr_native_vlan_#{scope.lookupvar('interfaces').split(",").first}") -%>
+==== Network Ports ====
+^Interface^VLAN^Switch^Port^
+<% scope.lookupvar('interfaces').split(",").each do |interface|
+next if interface =~ /^sit0|^lo$/
+-%>
+<% if scope.lookupvar("cdpr_native_vlan_#{interface}") -%>
+|<%= interface.tr('_',':') -%>|<%= scope.lookupvar("cdpr_native_vlan_#{interface}") -%>|<%= scope.lookupvar("cdpr_device_id_#{interface}") -%>|<%= scope.lookupvar("cdpr_port_id_#{interface}") -%>|
+<% end -%>
+<% end -%>
+<% end -%>
+
+<% if scope.lookupvar("routes") -%>
+==== Routing Table ====
+<% eval(scope.lookupvar("routes")).each do |route| -%>
+|<%= route.join(' ') %>|
+<% end -%>
+<% end -%>
+
+==== Ethernetcards ====
+<% former = '' -%>
+<% scope.to_hash.select { |k,v| k.to_s =~ /ethernetcontroller/ }.sort.each do |k,v| 
+	controller = k.split("_").first
+	if controller != former -%>
+=== <%= controller -%> ===
+<% former = controller.dup
+	end
+-%>
+^<%= k.split("_").last -%> | <%= v.to_s -%>|
+<% end -%>
+

@@ -1,0 +1,36 @@
+<% if scope.to_hash.select { |k,v| k.to_s =~ /fc_/ }.size >= 1 -%>
+===== FibreChannel =====
+<% 
+  fc = {}
+  scope.to_hash.select { |k,v| k.to_s =~ /fc_/ }.sort.each do |k,v| 
+    key = k.split('_')
+    fc[key[1]] ||= {}
+    fc[key[1]][key[2]] = v
+  end
+
+  keys = [
+    "portwwn",
+    "speed",
+    "driver",
+    "driverversion",
+    "hwpath"
+  ]
+
+  table = []
+  fc.each do |k,device|
+    tmp = []
+    keys.each do |key|
+      unless device[key].nil?
+        tmp << device[key]
+      else
+        tmp << "     "
+      end
+    end
+    table << tmp
+  end
+-%>
+^<% keys.each do |key| -%><%= key.capitalize %>^<% end %>
+<% table.each do |line| -%>
+|<% line.each do |cell| -%><%= cell -%>|<% end %>
+<% end -%>
+<% end -%>

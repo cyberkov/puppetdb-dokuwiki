@@ -1,0 +1,8 @@
+<% if scope.lookupvar('nfs_devs') -%>
+===== NFS =====
+^Path^Source^
+<% nfsdevs = scope.lookupvar('nfs_devs').split(" ") -%>
+<% scope.lookupvar('nfs_mounts').split(" ").each_with_index do |nfs,index| -%>
+|<%= nfs -%>|<%= nfsdevs[index] %>|
+<% end -%>
+<% end -%>

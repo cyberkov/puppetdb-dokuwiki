@@ -1,0 +1,36 @@
+<% if scope.to_hash.select { |k,v| k.to_s =~ /san_/ }.size >= 1 -%>
+===== SAN =====
+<% 
+  san = {}
+  scope.to_hash.select { |k,v| k.to_s =~ /san_/ }.sort.each do |k,v| 
+    key = k.split('_')
+    san[key[1]] ||= {}
+    san[key[1]][key[2]] = v
+  end
+
+  keys = [
+    "id",
+    "size",
+    "use",
+    "san",
+    "asmstatus"
+  ]
+
+  table = []
+  san.each do |k,device|
+    tmp = []
+    keys.each do |key|
+      unless device[key].nil?
+        tmp << device[key]
+      else
+        tmp << "     "
+      end
+    end
+    table << tmp
+  end
+-%>
+^<% keys.each do |key| -%><%= key.capitalize %>^<% end %>
+<% table.each do |line| -%>
+|<% line.each do |cell| -%><%= cell -%>|<% end %>
+<% end -%>
+<% end -%>

@@ -1,0 +1,22 @@
+===== Hardware =====
+^Manufacturer|<%= scope.lookupvar('manufacturer') %>|
+^Productname|<%= scope.lookupvar('productname') %>|
+^Serialnumber|<%= scope.lookupvar('serialnumber') %>|
+
+^Processor|<%= scope.lookupvar('processor0') %> ( Physical: <%= scope.lookupvar('physicalprocessorcount') %>, Threads/Cores: <%= scope.lookupvar('processorcount').to_i / scope.lookupvar('physicalprocessorcount').to_i %>(( Unfortunately you cannot tell whether hyperthreading is on or there are that many cores. Please see http://ark.intel.com/ for more information. )) )| 
+^Memory|<%= scope.lookupvar('memorytotal') %>|
+
+<% if scope.lookupvar('ilo_ipaddress') -%>
+=== ILO ===
+^Address | [[https://<%= scope.lookupvar('ilo_ipaddress') %>/|<%= scope.lookupvar('ilo_ipaddress') %>]]|
+^Netmask | <%= scope.lookupvar('ilo_netmask') %>|
+^Dnsname | <%= scope.lookupvar('ilo_dnsname') %>|
+<% end -%>
+<% if scope.lookupvar('bladechassis_enclosure') -%>
+=== Bladechassis ===
+^Enclosure | [[server:<%= scope.lookupvar('bladechassis_enclosure') %>]]|
+^Slot | <%= scope.lookupvar('bladechassis_slot') %>|
+^Rack | <%= scope.lookupvar('bladechassis_rack') %>|
+^OA IP | [[https://<%= scope.lookupvar('bladechassis_ipaddress') %>|<%= scope.lookupvar('bladechassis_ipaddress') %>]]|
+{{tag>:server:<%= scope.lookupvar('bladechassis_enclosure') %>}}
+<% end -%>
